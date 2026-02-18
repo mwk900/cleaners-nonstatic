@@ -13,7 +13,7 @@ const inquirySchema = z.object({
   propertyType: z.enum(["House", "Flat", "Office"]),
   serviceType: z.enum(["Regular", "Deep Clean", "End of Tenancy"]),
   preferredDate: z.string().min(1),
-  message: z.string().min(5)
+  message: z.string().min(5),
 });
 
 export async function submitInquiry(formData: FormData) {
@@ -24,7 +24,7 @@ export async function submitInquiry(formData: FormData) {
     propertyType: formData.get("propertyType"),
     serviceType: formData.get("serviceType"),
     preferredDate: formData.get("preferredDate"),
-    message: formData.get("message")
+    message: formData.get("message"),
   });
 
   if (!parsed.success) {
@@ -34,21 +34,28 @@ export async function submitInquiry(formData: FormData) {
   await prisma.inquiry.create({
     data: {
       ...parsed.data,
-      preferredDate: new Date(parsed.data.preferredDate)
-    }
+      preferredDate: new Date(parsed.data.preferredDate),
+    },
   });
 
   revalidatePath("/admin");
   return { success: "Thanks! We received your quote request." };
 }
 
-export async function adminLogin(formData: FormData) {
+// Server Actions used in <form action={...}> must return void / Promise<void>
+export async function adminLogin(formData: FormData): Promise<void> {
   const password = String(formData.get("password") ?? "");
+
   if (password && password === process.env.ADMIN_PASSWORD) {
-    cookies().set("admin-auth", password, { httpOnly: true, sameSite: "lax" });
+    cookies().set("admin-auth", password, {
+      httpOnly: true,
+      sameSite: "lax",
+    });
     redirect("/admin");
   }
-  return { error: "Incorrect password" };
+
+  // Invalid password: redirect back with an error flag
+  redirect("/admin/login?error=1");
 }
 
 export async function updateInquiryStatus(formData: FormData) {
@@ -67,3 +74,4 @@ export async function updateInquiryStatus(formData: FormData) {
   await prisma.inquiry.update({ where: { id }, data: { status } });
   revalidatePath("/admin");
 }
+
