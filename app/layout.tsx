@@ -1,41 +1,50 @@
 import type { Metadata } from "next";
+import { Outfit } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
-import { business } from "@/lib/constants";
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
+});
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nottinghamclean.co.uk"),
-  title: {
-    default: `${business.name} | Professional Cleaning Services in Nottingham`,
-    template: `%s | ${business.name}`
-  },
-  description: "Professional home and office cleaning services in Nottingham with flexible scheduling.",
+  metadataBase: new URL("https://spotlessnottingham.co.uk"),
+  title: "Spotless Nottingham | Domestic Cleaning Services",
+  description:
+    "Reliable domestic cleaning across Nottingham. Weekly, fortnightly, or one-off deep cleans. Insured, DBS checked, 4.9★ rated.",
   openGraph: {
-    title: business.name,
-    description: "Trusted local cleaning services in Nottingham.",
+    title: "Spotless Nottingham",
+    description:
+      "Clean home. Clear head. Reliable domestic cleaning across Nottingham.",
     type: "website",
-    locale: "en_GB"
-  }
+    locale: "en_GB",
+  },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const localBusinessSchema = {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const schema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    name: business.name,
-    areaServed: business.location,
-    telephone: business.phone,
-    email: business.email
+    name: "Spotless Nottingham",
+    areaServed: "Nottingham, UK",
+    telephone: "0115 000 0000",
+    email: "hello@spotlessnottingham.co.uk",
   };
 
   return (
-    <html lang="en">
-      <body className="min-h-screen bg-slate-50">
-        <Header />
-        <main>{children}</main>
-        <Footer />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }} />
+    <html lang="en" className={outfit.variable}>
+      <body>
+        {children}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
       </body>
     </html>
   );

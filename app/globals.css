@@ -3,13 +3,70 @@
 @tailwind utilities;
 
 :root {
+  --bg-primary: #fafffe;
+  --bg-mint: #f0faf8;
+  --bg-lavender: #f3f0fa;
+  --bg-peach: #faf3f0;
+  --bg-dark: #1a2a28;
+  --accent: #2db89a;
+  --accent-hover: #239e84;
+  --accent-soft: #d4f0e9;
+  --text-primary: #1a1f1e;
+  --text-secondary: #6b7b78;
+  --text-on-dark: #f0faf8;
+  --chat-bubble: #e8f5e9;
   color-scheme: light;
 }
 
-body {
-  @apply bg-white text-slate-900 antialiased;
+html {
+  scroll-behavior: smooth;
 }
 
-.section {
-  @apply mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8;
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+/* Pricing scroll snap container */
+.pricing-scroll {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 0;
+  padding-bottom: 1rem;
+}
+
+.pricing-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.pricing-card-snap {
+  scroll-snap-align: center;
+  flex-shrink: 0;
+}
+
+/* Chat bubble typing dots */
+@keyframes typing-dot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-6px); opacity: 1; }
+}
+
+.typing-dot:nth-child(1) { animation: typing-dot 1.2s ease infinite 0s; }
+.typing-dot:nth-child(2) { animation: typing-dot 1.2s ease infinite 0.2s; }
+.typing-dot:nth-child(3) { animation: typing-dot 1.2s ease infinite 0.4s; }
+
+/* Safe area for mobile bottom bar */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
