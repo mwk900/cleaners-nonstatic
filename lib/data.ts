@@ -1,6 +1,7 @@
 export const PHONE = "0115 000 0000";
 export const PHONE_HREF = "tel:01150000000";
 export const EMAIL = "hello@spotlessnottingham.co.uk";
+export const OPENING_HOURS = "Mon–Fri 8am–6pm · Sat 9am–1pm";
 export const WHATSAPP_HREF = "https://wa.me/441150000000";
 
 export const services = [

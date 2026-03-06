@@ -24,7 +24,13 @@ const SEQUENCE = [
   1100, // phase 10: Spotless reply
 ];
 
-export default function TestimonialsSection() {
+type TestimonialsSectionProps = {
+  splitLayout?: boolean;
+};
+
+export default function TestimonialsSection({
+  splitLayout = false,
+}: TestimonialsSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const inView = useInView(sectionRef, { once: true, margin: "-60px" });
   const [phase, setPhase] = useState(0);
@@ -34,13 +40,15 @@ export default function TestimonialsSection() {
     if (!inView || started) return;
     setStarted(true);
 
-    let total = 0;
+    // On desktop split layout, delay until after the wipe + hero animations complete
+    const initialDelay = splitLayout ? 2800 : 0;
+    let total = initialDelay;
     SEQUENCE.forEach((delay, i) => {
       total += delay;
       const p = i + 1;
       setTimeout(() => setPhase(p), total);
     });
-  }, [inView, started]);
+  }, [inView, started, splitLayout]);
 
   const bubbleVisible = (i: number) => phase >= (i + 1) * 2;
   const typingVisible = (i: number) => phase === i * 2 + 1;
@@ -51,27 +59,17 @@ export default function TestimonialsSection() {
     <section
       id="reviews"
       ref={sectionRef}
-      className="px-5 py-14 sm:px-6 lg:py-24"
-      style={{ background: "var(--bg-primary)" }}
+      className={`bg-[var(--bg-primary)] px-5 py-14 sm:px-6 lg:py-24 ${
+        splitLayout
+          ? "md:flex md:min-h-[100svh] md:items-center md:bg-transparent md:px-0 md:py-12 lg:py-12"
+          : ""
+      }`}
     >
-      <div className="mx-auto max-w-3xl">
-        <motion.div
-          className="mb-8 text-center"
-          initial={{ opacity: 0, y: 12 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-        >
-          <h2
-            className="font-bold"
-            style={{
-              fontSize: "clamp(1.5rem, 4vw, 2.25rem)",
-              color: "var(--text-primary)",
-            }}
-          >
-            What our customers say.
-          </h2>
-        </motion.div>
-
+      <div
+        className={`mx-auto max-w-3xl ${
+          splitLayout ? "md:mx-0 md:ml-auto md:max-w-md" : ""
+        }`}
+      >
         {/* Phone frame */}
         <motion.div
           className="mx-auto max-w-sm rounded-3xl px-4 py-5 shadow-xl"
@@ -81,7 +79,11 @@ export default function TestimonialsSection() {
           }}
           initial={{ opacity: 0, y: 20, scale: 0.97 }}
           animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
+          transition={{
+            duration: 0.6,
+            delay: splitLayout ? 2.8 : 0.15,
+            ease: [0.25, 0.46, 0.45, 0.94],
+          }}
         >
           {/* Status bar */}
           <div className="mb-3 flex items-center justify-between px-1">
@@ -189,7 +191,7 @@ export default function TestimonialsSection() {
           style={{ color: "var(--text-secondary)" }}
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.4 }}
+          transition={{ duration: 0.5, delay: splitLayout ? 3.1 : 0.4 }}
         >
           Rated{" "}
           <span style={{ color: "var(--text-primary)" }} className="font-bold">

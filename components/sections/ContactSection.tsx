@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { PHONE, PHONE_HREF, WHATSAPP_HREF } from "@/lib/data";
+import { OPENING_HOURS, PHONE, PHONE_HREF, WHATSAPP_HREF } from "@/lib/data";
 
 const SERVICE_OPTIONS = [
   "Regular cleaning",
@@ -78,7 +78,7 @@ export default function ContactSection() {
               className="mt-3 text-center text-xs"
               style={{ color: "var(--text-secondary)" }}
             >
-              Mon–Fri 8am–6pm · Sat 9am–1pm
+              {OPENING_HOURS}
             </p>
           </motion.div>
 
